@@ -133,7 +133,7 @@ def connect():
         return jsonify({'success': False, 'error': 'No token provided'})
     
     # Your Deriv App ID - REPLACE THIS WITH YOUR ACTUAL APP ID
-    DERIV_APP_ID = "YOUR_APP_ID_HERE"  # ⚠️ CHANGE THIS!
+    DERIV_APP_ID = 120541
     
     # For simplicity, use a random user ID (in real app, use session/user ID)
     user_id = str(random.randint(1000, 9999))
