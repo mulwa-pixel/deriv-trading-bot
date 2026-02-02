@@ -19,7 +19,7 @@ from deriv_api import DerivAPI
 # Globals
 api = None
 authorized = False
-app_id = YOUR_APP_ID_HERE  # ← replace!
+app_id = 120541  # ← replace!
 api_token = None
 balance = "N/A"
 
