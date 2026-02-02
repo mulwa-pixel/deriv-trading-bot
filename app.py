@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template_string, jsonify, request
 import os
 import random
@@ -6,6 +5,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+@app.route("/healthz")
+def health():
+    return "ok", 200
+    
 # HTML Template
 HTML = '''
 <!DOCTYPE html>
