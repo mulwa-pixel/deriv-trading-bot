@@ -132,7 +132,7 @@ def connect():
     if not token:
         return jsonify({'success': False, 'error': 'No token provided'})
     
-    # Your Deriv App ID - REPLACE THIS WITH YOUR ACTUAL APP ID
+    # Your Deriv App ID 
     DERIV_APP_ID = 120541
     
     # For simplicity, use a random user ID (in real app, use session/user ID)
