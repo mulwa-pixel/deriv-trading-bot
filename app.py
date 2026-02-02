@@ -12,15 +12,70 @@ authorized = False
 app_id = 120541  # ← REPLACE with your real app_id (e.g. 1089 or whatever)
 api_token = None  # Set on connect
 
-# Run async functions in sync Flask
-def run_async(coro):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    return loop.run_until_complete(coro)
+# ... (keep imports, add these)
+import threading
+from deriv_api import DerivAPI
 
-@app.route("/healthz")
-def health():
-    return "ok", 200
+# Globals
+api = None
+authorized = False
+app_id = YOUR_APP_ID_HERE  # ← replace!
+api_token = None
+balance = "N/A"
+
+def init_api():
+    global api, authorized, balance
+    try:
+        api = DerivAPI(endpoint=f'wss://ws.derivws.com/websockets/v3?app_id={app_id}')
+        auth_resp = api.authorize({'authorize': api_token})  # Try sync call first
+        if 'error' in auth_resp:
+            print("Auth error:", auth_resp['error'])
+            return False
+        authorized = True
+        bal_resp = api.balance({'balance': 1})
+        if 'balance' in bal_resp:
+            balance = bal_resp['balance']['balance']
+        return True
+    except Exception as e:
+        print("Init error:", str(e))
+        return False
+
+@app.route('/api/connect', methods=['POST'])
+def connect():
+    global api_token
+    data = request.json
+    token = data.get('token', '')
+    if not token:
+        return jsonify({'success': False, 'error': 'No token'})
+
+    api_token = token
+
+    # Run init in thread to avoid blocking Flask
+    def connect_thread():
+        if init_api():
+            print("Connected successfully")
+        else:
+            print("Connect failed")
+
+    threading.Thread(target=connect_thread, daemon=True).start()
+
+    return jsonify({'success': True, 'message': 'Connecting... check logs for result'})
+
+# For analyze/trade: check authorized first
+@app.route('/api/analyze')
+def analyze():
+    if not authorized:
+        return jsonify({'signal': 'WAIT', 'confidence': 0, 'reason': 'Not connected yet'})
+
+    # ... keep your random placeholder for now, or add real later
+
+@app.route('/api/trade', methods=['POST'])
+def trade():
+    if not authorized or api is None:
+        return jsonify({'success': False, 'error': 'Not connected'})
+
+    # ... your proposal/buy code, but use api.proposal(...) and api.buy(...) directly (they may be sync in lib)
+    # If they raise "coroutine" error, we'll adjust to async thread per trade
 
 # Your HTML stays the SAME – no change needed there
 
