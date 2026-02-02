@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Global vars (simple for MVP – later use session or redis)
 api = None
 authorized = False
-app_id = 120541  # ← REPLACE with your real app_id (e.g. 1089 or whatever)
+app_id = 120541
 api_token = None  # Set on connect
 
 # ... (keep imports, add these)
