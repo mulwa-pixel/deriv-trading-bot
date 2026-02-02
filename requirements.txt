@@ -1,4 +1,6 @@
 Flask==2.3.3
 gunicorn==21.2.0
-python-deriv-api
-websockets
+Flask==2.3.3
+gunicorn==21.2.0
+websockets==13.0
+asyncio==3.4.3
