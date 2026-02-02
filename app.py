@@ -1,6 +1,4 @@
-@app.route("/healthz")
-def health():
-    return "ok", 200
+
 from flask import Flask, render_template_string, jsonify, request
 import os
 import random
